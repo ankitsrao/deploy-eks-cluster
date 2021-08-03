@@ -1,6 +1,6 @@
 ## Amazon EKS with Terraform
 
-![amazon-eks.png](../images/amazon-eks.png)
+![amazon-eks.png](./images/amazon-eks.png)
 
 Create an AWS EKS cluster with Terraform. Deploying the EKS cluster may take around 15-20 minutes.
 
