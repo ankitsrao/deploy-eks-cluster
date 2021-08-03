@@ -15,6 +15,7 @@ Create an AWS EKS cluster with Terraform. Deploying the EKS cluster may take aro
 
 1. Clone the repository:
 ```
+git clone https://github.com/ankitsrao/deploy-eks-cluster.git
 ```
 
 2. Configure AWS credentials using any one of the below methods:
