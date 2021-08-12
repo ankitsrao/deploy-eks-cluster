@@ -51,7 +51,7 @@ resource "aws_eks_node_group" "node_group" {
     aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.policy-AmazonEC2ContainerRegistryReadOnly,
     aws_iam_role_policy_attachment.AmazonEKSPolicy,
-    aws_iam_role_policy_attachment.route53-access
+    aws_iam_role_policy_attachment.assume-role
   ]
 }
 
@@ -71,35 +71,20 @@ resource "aws_iam_role" "node_group" {
 }
 
 resource "aws_iam_policy" "policy" {
-  name        = "${var.node_group_name}_route53_access_policy"
+  name        = "${var.node_group_name}_assume_role_policy"
   path        = "/"
-  description = "Route53 access policy"
+  description = "Assume Role policy"
   policy = jsonencode({
       "Version": "2012-10-17",
       "Statement": [
-          {
-              "Effect": "Allow",
-              "Action": [
-                  "route53:GetChange",
-                  "route53:ChangeResourceRecordSets",
-                  "route53:ListResourceRecordSets"
-              ],
-              "Resource": [
-                  "arn:aws:route53:::hostedzone/*",
-                  "arn:aws:route53:::change/*"
-              ]
-          },
-          {
-              "Effect": "Allow",
-              "Action": [
-                  "route53:ListHostedZones",
-                  "route53:ListResourceRecordSets",
-                  "route53:ListHostedZonesByName"
-              ],
-              "Resource": [
-                  "*"
-              ]
-          }
+        {
+            "Action": [
+                "sts:AssumeRole"
+            ],
+            "Resource": "arn:aws:iam::*:role/*",
+            "Effect": "Allow",
+            "Sid": "AllowAssumeRoleForLambdaPolicy"
+        }
       ]
   })
 }
@@ -125,7 +110,7 @@ resource "aws_iam_role_policy_attachment" "AmazonEKSPolicy" {
   role       = aws_iam_role.node_group.name
 }
 
-resource "aws_iam_role_policy_attachment" "route53-access" {
+resource "aws_iam_role_policy_attachment" "assume-role" {
   policy_arn = aws_iam_policy.policy.arn
   role       = aws_iam_role.node_group.name
   depends_on = [ aws_iam_policy.policy ]

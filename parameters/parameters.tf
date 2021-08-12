@@ -3,19 +3,19 @@ output "region" {
 }
 
 output "vpc_name" {
-  value = "demo-eks-vpc"
+  value = "ankit-demo-eks-vpc"
 }
 
 output "cluster_name" {
-  value = "demo-eks-cluster"
+  value = "ankit-demo-eks-cluster"
 }
 
 output "cluster_version" {
-  value = "1.19"
+  value = "1.21"
 }
 
 output "node_group_name" {
-  value = "demo-nodegroup"
+  value = "ankit-demo-nodegroup"
 }
 
 #Input Parameter instance_type and AMI Type currently go hand in hand.
@@ -23,11 +23,11 @@ output "node_group_name" {
 #Index 0 instance_type will use index 0 ami_type and so on..
 
 output "instance_types" {
-  value = ["t2.micro", "t2.micro"]
+  value = ["t2.medium"]
 }
 
 output "ami_type" {
-  value = [ "AL2_x86_64", "AL2_x86_64" ]
+  value = [ "AL2_x86_64" ]
 }
 
 output "disk_size" {
@@ -35,15 +35,15 @@ output "disk_size" {
 }
 
 output "desired_size" {
-  value = [2, 1]
+  value = [2]
 }
 
 output "min_size" {
-  value = [2, 1]
+  value = [2]
 }
 
 output "max_size" {
-  value = [5, 5]
+  value = [5]
 }
 
 output "cidr_block" {
