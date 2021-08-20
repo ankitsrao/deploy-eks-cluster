@@ -33,3 +33,15 @@ module "vpc" {
 output "subnets" {
   value = concat(module.vpc.public_subnets, module.vpc.private_subnets)
 }
+
+resource "aws_s3_bucket" "vpc-log-bucket" {
+  bucket = "${var.vpc_name}-vpcdemo-log-bucket"
+}
+
+resource "aws_flow_log" "cspm-vpc-flowlog" {
+  log_destination      = aws_s3_bucket.vpc-log-bucket.arn
+  log_destination_type = "s3"
+  traffic_type         = "ALL"
+  vpc_id               = module.vpc.vpc_id
+  tags                 = { Name = "${var.vpc_name}-flowlog" }
+}

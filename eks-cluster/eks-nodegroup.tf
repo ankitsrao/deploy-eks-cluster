@@ -89,6 +89,29 @@ resource "aws_iam_policy" "policy" {
   })
 }
 
+resource "aws_iam_policy" "autoscaler_policy" {
+  name        = "${var.node_group_name}_autoscaler_policy"
+  path        = "/"
+  description = "Cluster Autoscaler Policy"
+  policy = jsonencode({
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+"autoscaling:DescribeAutoScalingGroups",
+        "autoscaling:DescribeAutoScalingInstances",
+        "autoscaling:DescribeLaunchConfigurations",
+        "autoscaling:DescribeTags",
+        "autoscaling:SetDesiredCapacity",
+        "autoscaling:TerminateInstanceInAutoScalingGroup"
+      ],
+      "Resource": "*"
+    }
+  ]
+})
+}
+
 resource "aws_iam_role_policy_attachment" "policy-AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.node_group.name
@@ -114,4 +137,10 @@ resource "aws_iam_role_policy_attachment" "assume-role" {
   policy_arn = aws_iam_policy.policy.arn
   role       = aws_iam_role.node_group.name
   depends_on = [ aws_iam_policy.policy ]
+}
+
+resource "aws_iam_role_policy_attachment" "autoscaler" {
+  policy_arn = aws_iam_policy.autoscaler_policy.arn
+  role       = aws_iam_role.node_group.name
+  depends_on = [ aws_iam_policy.autoscaler_policy ]
 }

@@ -13,6 +13,11 @@ variable "cluster_name" {
   default     = "demo-eks-cluster"
 }
 
+variable "cluster_version" {
+  description = "EKS cluster name"
+  default     = "1.21"
+}
+
 variable "node_group_name" {
   description = "EKS cluster name"
   default     = "demo-demo-nodegroup"
@@ -22,6 +27,17 @@ variable "instance_types" {
   type        = list(string)
   description = "Node group instance types"
   default     = []
+}
+
+variable "ami_type" {
+  type        = list(string)
+  description = "AMI Type"
+  default     = []
+}
+
+variable "disk_size" {
+  type        = number
+  description = "Disk Size"
 }
 
 variable "desired_size" {
